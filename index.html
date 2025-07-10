@@ -1,108 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Snake Game</title>
-  <style>
-    body {
-      margin: 0;
-      background: #111;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      color: white;
-      font-family: Arial, sans-serif;
-    }
-    canvas {
-      background: #222;
-      border: 2px solid #fff;
-    }
-    #score {
-      margin-bottom: 10px;
-      font-size: 20px;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reading Rewards</title>
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
+  <header>
+    <h1>📚 Reading Rewards</h1>
+    <p>Track your reading, earn XP, and enjoy AI-crafted stories!</p>
+  </header>
 
-<div id="score">Score: 0</div>
-<canvas id="game" width="400" height="400"></canvas>
+  <main>
+    <!-- Signup Form -->
+    <section id="signup">
+      <h2>Sign Up</h2>
+      <form id="signupForm">
+        <input type="text" placeholder="Name" required id="name"/>
+        <input type="text" placeholder="Favorite Genres" required id="genres"/>
+        <input type="text" placeholder="Favorite Authors" required id="authors"/>
+        <input type="number" placeholder="Preferred Book Length (pages)" required id="length"/>
+        <button type="submit">Start Reading</button>
+      </form>
+    </section>
 
-<script>
-  const canvas = document.getElementById('game');
-  const ctx = canvas.getContext('2d');
-  const box = 20;
-  const rows = canvas.height / box;
-  const columns = canvas.width / box;
+    <!-- Book Suggestion -->
+    <section id="suggestions" style="display:none;">
+      <h2>📖 Book Suggestions</h2>
+      <ul id="bookList">
+        <!-- JavaScript will insert books here -->
+      </ul>
+    </section>
 
-  let score = 0;
-  let snake = [{ x: 9 * box, y: 9 * box }];
-  let food = {
-    x: Math.floor(Math.random() * columns) * box,
-    y: Math.floor(Math.random() * rows) * box
-  };
+    <!-- XP Tracker -->
+    <section id="tracker" style="display:none;">
+      <h2>📈 XP Tracker</h2>
+      <p>Pages Read: <input type="number" id="pagesRead" min="1"/> <button onclick="addXP()">Add XP</button></p>
+      <p>Total XP: <span id="xp">0</span></p>
+      <p>Free Book Progress: <span id="rewardProgress">0%</span></p>
+    </section>
 
-  let direction = null;
+    <!-- AI Book Generator -->
+    <section id="aiCreator" style="display:none;">
+      <h2>🤖 AI Book Generator</h2>
+      <form id="aiForm">
+        <input type="text" placeholder="Favorite Book #1" required />
+        <input type="text" placeholder="Favorite Book #2" required />
+        <input type="text" placeholder="Favorite Book #3" required />
+        <button type="submit">Generate My Story</button>
+      </form>
+    </section>
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft' && direction !== 'RIGHT') direction = 'LEFT';
-    if (e.key === 'ArrowUp' && direction !== 'DOWN') direction = 'UP';
-    if (e.key === 'ArrowRight' && direction !== 'LEFT') direction = 'RIGHT';
-    if (e.key === 'ArrowDown' && direction !== 'UP') direction = 'DOWN';
-  });
+    <!-- Subscription Plans -->
+    <section id="plans">
+      <h2>💳 Subscription Plans</h2>
+      <ul>
+        <li><strong>Bronze</strong> – €7/month: 30 books + 3 AI credits</li>
+        <li><strong>Silver</strong> – €15/month: 50% off all books + 7 AI credits</li>
+        <li><strong>Gold</strong> – €25/month: Unlimited books + AI</li>
+      </ul>
+    </section>
+  </main>
 
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  <footer>
+    <p>&copy; 2025 Reading Rewards</p>
+  </footer>
 
-    // Draw snake
-    for (let i = 0; i < snake.length; i++) {
-      ctx.fillStyle = i === 0 ? 'lime' : 'green';
-      ctx.fillRect(snake[i].x, snake[i].y, box, box);
-    }
-
-    // Draw food
-    ctx.fillStyle = 'red';
-    ctx.fillRect(food.x, food.y, box, box);
-
-    // Snake head
-    let head = { x: snake[0].x, y: snake[0].y };
-
-    if (direction === 'LEFT') head.x -= box;
-    if (direction === 'UP') head.y -= box;
-    if (direction === 'RIGHT') head.x += box;
-    if (direction === 'DOWN') head.y += box;
-
-    // Game over conditions
-    if (
-      head.x < 0 || head.x >= canvas.width ||
-      head.y < 0 || head.y >= canvas.height ||
-      snake.some(segment => segment.x === head.x && segment.y === head.y)
-    ) {
-      clearInterval(game);
-      alert('Game Over! Your score: ' + score);
-      return;
-    }
-
-    // Eat food
-    if (head.x === food.x && head.y === food.y) {
-      score++;
-      document.getElementById('score').textContent = 'Score: ' + score;
-      food = {
-        x: Math.floor(Math.random() * columns) * box,
-        y: Math.floor(Math.random() * rows) * box
-      };
-    } else {
-      snake.pop();
-    }
-
-    snake.unshift(head);
-  }
-
-  const game = setInterval(draw, 100);
-</script>
-
+  <script src="script.js"></script>
 </body>
 </html>
 
